@@ -6,7 +6,7 @@ import { formatRelativeTime } from '../../utils/dateUtils'
 import {
   LayoutDashboard, Calendar, BarChart2, Users, FileText,
   IndianRupee, Bell, Settings, HelpCircle, LogOut, BookOpen, UserCheck, ClipboardList,
-  CreditCard, AlertCircle, CheckCircle2
+  CreditCard, AlertCircle, CheckCircle2,
 } from 'lucide-react'
 
 const NAV_ITEMS = {
@@ -42,6 +42,7 @@ const NAV_ITEMS = {
   superadmin: [
     { icon: LayoutDashboard, to: '/admin/users', label: 'Users' },
     { icon: UserCheck, to: '/admin/teacher-assignments', label: 'Assignments' },
+    { icon: Users, to: '/admin/promote-students', label: 'Promote Students' },
     { icon: BarChart2, to: '/director/dashboard', label: 'Analytics' },
   ]
 }

@@ -39,6 +39,7 @@ import StudentTests       from './pages/student/StudentTests'
 // Admin
 import UserManagement      from './pages/admin/UserManagement'
 import TeacherAssignments  from './pages/admin/TeacherAssignments'
+import PromoteStudents     from './pages/admin/PromoteStudents'
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isAuthenticated, user } = useAuthStore()
@@ -142,6 +143,8 @@ export default function App() {
         element={<ProtectedRoute allowedRoles={['superadmin','director','principal']}><UserManagement /></ProtectedRoute>} />
       <Route path="/admin/teacher-assignments"
         element={<ProtectedRoute allowedRoles={['superadmin','director','principal']}><TeacherAssignments /></ProtectedRoute>} />
+      <Route path="/admin/promote-students"
+        element={<ProtectedRoute allowedRoles={['superadmin']}><PromoteStudents /></ProtectedRoute>} />
 
       {/* Unauthorized */}
       <Route path="/unauthorized" element={

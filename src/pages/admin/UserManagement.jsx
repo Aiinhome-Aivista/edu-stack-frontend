@@ -15,13 +15,23 @@ const ROLE_COLORS = {
   superadmin: 'text-gray-700 bg-gray-100 text-xs font-semibold px-2 py-1 rounded-full'
 }
 
+
+
 export default function UserManagement() {
   const { user } = useAuthStore()
   const queryClient = useQueryClient()
   const [roleFilter, setRoleFilter] = useState('')
   const [search, setSearch] = useState('')
   const [showCreate, setShowCreate] = useState(false)
+  const [showSession, setShowSession] = useState(false)
   const [newUser, setNewUser] = useState({ email: '', role: 'student', full_name: '', institution_id: 1 })
+  const [newSession, setNewSession] = useState({
+    institution_id: "",
+    name: "",
+    start_date: "",
+    end_date: "",
+    is_active: true
+  })
 
   const { data } = useQuery(['users', roleFilter], () =>
     api.get(`/admin/users?role=${roleFilter}&per_page=50`).then(r => r.data))
@@ -30,7 +40,9 @@ export default function UserManagement() {
   const { data: classesData = [] } = useQuery(['classes', newUser.grade_id],
     () => api.get(`/academic/classes?grade_id=${newUser.grade_id}`).then(r => r.data), { enabled: !!newUser.grade_id })
 
-  const createMutation = useMutation(d => api.post('/admin/users', d), {
+  const { data: instData } = useQuery('institutions', () => api.get('/admin/institutions').then(r => r.data))
+
+  const createMutation = useMutation(d => api.post('/admin/add-user', d), {
     onSuccess: (res) => {
       toast.success(`User created! Temp password: ${res.data.temp_password}`)
       setShowCreate(false)
@@ -41,6 +53,15 @@ export default function UserManagement() {
 
   const deleteMutation = useMutation(id => api.delete(`/admin/users/${id}`), {
     onSuccess: () => { toast.success('User deactivated'); queryClient.invalidateQueries('users') }
+  })
+
+  const sessionMutation = useMutation(d => api.post('/admin/sessions', d), {
+    onSuccess: () => {
+      toast.success('Academic Session created!')
+      setShowSession(false)
+      queryClient.invalidateQueries('sessions')
+    },
+    onError: e => toast.error(e?.response?.data?.error || 'Failed to create session')
   })
 
   const users = (data?.users || []).filter(u =>
@@ -54,9 +75,15 @@ export default function UserManagement() {
           <h1 className="text-xl font-extrabold" style={{ color: 'var(--brand-navy)' }}>
             User Management
           </h1>
-          <button onClick={() => setShowCreate(true)} className="btn-primary flex items-center gap-2">
-            <Plus size={16} /> Create User
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setShowSession(true)} className="flex items-center gap-2 px-[22px] py-[10px] rounded-[10px] text-white text-sm font-semibold transition hover:opacity-90 shadow-sm"
+              style={{ background: 'linear-gradient(135deg, #FF8C00 0%, #FFA500 100%)' }}>
+              <Plus size={16} /> Create Academic Session
+            </button>
+            <button onClick={() => setShowCreate(true)} className="btn-primary flex items-center gap-2">
+              <Plus size={16} /> Create User
+            </button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -210,6 +237,69 @@ export default function UserManagement() {
                   disabled={createMutation.isLoading}
                   className="btn-primary flex-1 py-2.5 rounded-xl">
                   {createMutation.isLoading ? 'Creating…' : 'Create User'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Session Modal */}
+        {showSession && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+            <div className="card p-6 w-full max-w-sm">
+              <h2 className="font-bold text-lg mb-4" style={{ color: 'var(--brand-navy)' }}>
+                Create Academic Session
+              </h2>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium mb-1" style={{ color: 'var(--brand-navy)' }}>Institution Name</label>
+                  <select value={newSession.institution_id}
+                    onChange={e => setNewSession(p => ({ ...p, institution_id: e.target.value }))}
+                    className="w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                    style={{ borderColor: 'var(--brand-border)', background: 'var(--brand-bg)' }}>
+                    <option value="">Select Institution</option>
+                    {(instData?.institutions || []).map(i => (
+                      <option key={i.id} value={i.id}>{i.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium mb-1" style={{ color: 'var(--brand-navy)' }}>Academic Session</label>
+                  <input type="text" value={newSession.name}
+                    onChange={e => setNewSession(p => ({ ...p, name: e.target.value }))}
+                    placeholder="e.g. 2025-2026"
+                    className="w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                    style={{ borderColor: 'var(--brand-border)', background: 'var(--brand-bg)' }} />
+                </div>
+                {[
+                  { label: 'Start Date', key: 'start_date', type: 'date' },
+                  { label: 'End Date', key: 'end_date', type: 'date' },
+                ].map(f => (
+                  <div key={f.key}>
+                    <label className="block text-xs font-medium mb-1" style={{ color: 'var(--brand-navy)' }}>
+                      {f.label}
+                    </label>
+                    <input type={f.type} value={newSession[f.key]}
+                      onChange={e => setNewSession(p => ({ ...p, [f.key]: e.target.value }))}
+                      className="w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                      style={{ borderColor: 'var(--brand-border)', background: 'var(--brand-bg)' }} />
+                  </div>
+                ))}
+                <label className="flex items-center gap-2 cursor-pointer mt-2">
+                  <input type="checkbox" checked={newSession.is_active}
+                    onChange={e => setNewSession(p => ({ ...p, is_active: e.target.checked }))}
+                    className="w-4 h-4 rounded text-orange-500 focus:ring-orange-300" />
+                  <span className="text-sm font-medium" style={{ color: 'var(--brand-navy)' }}>Active Session</span>
+                </label>
+              </div>
+              <div className="flex gap-3 mt-5">
+                <button onClick={() => setShowSession(false)} className="btn-secondary flex-1 py-2 rounded-xl text-sm">
+                  Cancel
+                </button>
+                <button onClick={() => sessionMutation.mutate(newSession)}
+                  disabled={sessionMutation.isLoading}
+                  className="btn-primary flex-1 py-2 rounded-xl text-sm">
+                  {sessionMutation.isLoading ? 'Creating…' : 'Create Session'}
                 </button>
               </div>
             </div>
