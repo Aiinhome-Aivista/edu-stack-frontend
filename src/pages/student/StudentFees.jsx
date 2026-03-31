@@ -43,7 +43,7 @@ export default function StudentFees() {
   ]
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Student" subtitle="Pay fees and view transactions">
       <div className="mx-auto">
         <div className="flex items-center gap-3 mb-5">
           <button className="w-8 h-8 rounded-xl border flex items-center justify-center"

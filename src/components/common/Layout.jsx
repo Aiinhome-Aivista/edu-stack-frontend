@@ -199,10 +199,10 @@ export function Topbar({ title, subtitle }) {
       <div className="flex items-center gap-3 relative">
         <button
           onClick={() => setShowNotifications(!showNotifications)}
-          className="relative p-2 rounded-xl hover:bg-gray-100 transition active:scale-95 group">
+          className="relative p-2 rounded-xl hover:bg-gray-50 transition active:scale-95 group bg-gray-100">
           <Bell size={20} className="transition-colors group-hover:text-orange-500" style={{ color: 'var(--text-secondary)' }} />
           {unreadCount > 0 && (
-            <span className="absolute top-0 -left-1 min-w-[18px] h-[18px] px-1 rounded-full bg-orange-500 flex items-center justify-center text-[10px] font-bold text-white border-2 border-white animate-in zoom-in duration-300">
+            <span className="absolute top-0 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-orange-500 flex items-center justify-center text-[10px] font-bold text-white border-2 border-white animate-in zoom-in duration-300">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
