@@ -10,15 +10,20 @@ export default function PromoteStudents() {
   const [newClassId, setNewClassId] = useState('')
   const [search, setSearch] = useState('')
   const [gradeFilter, setGradeFilter] = useState('')
+  const [sessionId, setSessionId] = useState('')
 
   // Fetch grades
   const { data: gradesData = [] } = useQuery('grades', () => 
     api.get('/academic/grades').then(r => r.data))
 
+  // Fetch sessions
+  const { data: sessionsData = [] } = useQuery('sessions', () => 
+    api.get('/academic/sessions').then(r => r.data))
+
   // Fetch target classes (for promotion)
-  const { data: targetClasses = [] } = useQuery(['targetClasses', gradeFilter], 
-    () => api.get(`/academic/classes?grade_id=${gradeFilter}`).then(r => r.data), 
-    { enabled: !!gradeFilter })
+  const { data: targetClasses = [] } = useQuery(['targetClasses', gradeFilter, sessionId], 
+    () => api.get(`/academic/classes?session_id=${sessionId}&grade_id=${gradeFilter}`).then(r => r.data), 
+    { enabled: !!gradeFilter && !!sessionId })
 
   // Fetch students
   const { data: studentsData, isLoading } = useQuery('all-students', () => 
@@ -59,7 +64,7 @@ export default function PromoteStudents() {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <h1 className="text-xl font-extrabold flex items-center gap-2" style={{ color: 'var(--brand-navy)' }}>
             
-            Assign Students to Session
+            Assign Students to New Session
           </h1>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
@@ -69,7 +74,7 @@ export default function PromoteStudents() {
               onClick={handlePromote}
               disabled={promoteMutation.isLoading}
               className="btn-primary flex items-center gap-2 px-6 py-2.5 rounded-xl shadow-lg transition transform active:scale-95 disabled:opacity-50">
-              {promoteMutation.isLoading ? 'Adding...' : 'Add to  Session'}
+              {promoteMutation.isLoading ? 'Adding...' : 'Add to New Session'}
             </button>
           </div>
         </div>
@@ -81,6 +86,17 @@ export default function PromoteStudents() {
                Class Configuration
             </h2>
             <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--brand-navy)' }}>Session</label>
+                <select 
+                  value={sessionId} 
+                  onChange={e => { setSessionId(e.target.value); setNewClassId(''); }}
+                  className="w-full px-3 py-2.5 rounded-xl border text-sm focus:ring-2 focus:ring-orange-300 outline-none"
+                  style={{ borderColor: 'var(--brand-border)', background: 'var(--brand-bg)' }}>
+                  <option value="">Select Session</option>
+                  {sessionsData.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </select>
+              </div>
               <div className="flex-1">
                 <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--brand-navy)' }}>Grade</label>
                 <select 
@@ -96,7 +112,7 @@ export default function PromoteStudents() {
                 <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--brand-navy)' }}>Class Section</label>
                 <select 
                   value={newClassId} 
-                  disabled={!gradeFilter}
+                  disabled={!gradeFilter || !sessionId}
                   onChange={e => setNewClassId(e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl border text-sm focus:ring-2 focus:ring-orange-300 outline-none disabled:opacity-50"
                   style={{ borderColor: 'var(--brand-border)', background: 'var(--brand-bg)' }}>

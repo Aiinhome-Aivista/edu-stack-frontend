@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../context/authStore'
 import toast from 'react-hot-toast'
 import { Eye, EyeOff, BookOpen } from 'lucide-react'
+import logo from '../assets/Edustack_logo.svg'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -34,11 +35,11 @@ export default function LoginPage() {
            style={{ background: 'linear-gradient(145deg, #1E2B6F 0%, #2E3E8F 60%, #6B5ECD 100%)' }}>
         <div className="text-center text-white max-w-md">
           {/* Logo */}
-          <div className="flex items-center justify-center gap-3 mb-10">
-            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-              <BookOpen size={24} className="text-orange-500" />
+          <div className="flex items-center justify-center gap-4 mb-10">
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm shadow-white/20 flex-shrink-0">
+              <img src={logo} alt="EduStack Logo" className="w-12 h-12 object-contain" />
             </div>
-            <span className="text-3xl font-bold">
+            <span className="text-4xl font-bold tracking-tight">
               <span className="text-white">Edu</span>
               <span style={{ color: '#F05A28' }}>Stack</span>
             </span>
@@ -67,7 +68,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8">
-            <BookOpen size={28} className="text-orange-500" />
+            <img src={logo} alt="EduStack Logo" className="h-10 w-auto" />
             <span className="text-2xl font-bold" style={{ color: 'var(--brand-navy)' }}>
               Edu<span style={{ color: '#F05A28' }}>Stack</span>
             </span>

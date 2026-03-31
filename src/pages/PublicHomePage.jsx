@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BookOpen, BarChart2, Users, GraduationCap, Wifi, Database, CheckCircle } from 'lucide-react'
+import logo from "../assets/Edustack_logo.svg"
 
 const PILLARS = [
   { icon: '🏛', title: 'Institute', color: '#1E2B6F',
@@ -31,7 +32,7 @@ export default function PublicHomePage() {
       <header className="px-8 py-5 flex items-center justify-between"
         style={{ background: 'rgba(255,255,255,0.95)' }}>
         <div className="flex items-center gap-2">
-          <BookOpen size={22} className="text-orange-500" />
+          <img src={logo} alt="EduStack Logo" className="h-8 w-auto" />
           <span className="text-xl font-extrabold">
             <span style={{ color: '#1E2B6F' }}>Edu</span>
             <span style={{ color: '#F05A28' }}>Stack</span>
@@ -63,7 +64,7 @@ export default function PublicHomePage() {
 
         <div className="relative z-10 max-w-lg">
           <div className="flex items-center gap-2 mb-6">
-            <BookOpen size={36} className="text-orange-500" />
+             <img src={logo} alt="EduStack Logo" className='h-12 w-12' />
             <span className="text-4xl font-extrabold">
               <span style={{ color: '#1E2B6F' }}>Edu</span>
               <span style={{ color: '#F05A28' }}>Stack</span>
@@ -202,7 +203,7 @@ export default function PublicHomePage() {
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-3">
-              <BookOpen size={20} className="text-orange-500" />
+              <img src={logo} alt="EduStack Logo" className="h-7 w-auto" />
               <span className="font-extrabold text-lg">
                 <span style={{ color: '#1E2B6F' }}>Edu</span>
                 <span style={{ color: '#F05A28' }}>Stack</span>

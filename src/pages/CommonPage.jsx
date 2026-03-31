@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { BookOpen, ArrowLeft } from 'lucide-react'
+import logo from '../assets/Edustack_logo.svg'
 
 export default function CommonPage() {
   const { slug } = useParams()
@@ -27,7 +28,7 @@ export default function CommonPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="px-8 py-5 bg-white border-b flex items-center justify-between">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <BookOpen size={22} className="text-orange-500" />
+          <img src={logo} alt="EduStack Logo" className="h-8 w-auto" />
           <span className="text-xl font-extrabold">
             <span style={{ color: '#1E2B6F' }}>Edu</span>
             <span style={{ color: '#F05A28' }}>Stack</span>
@@ -41,8 +42,8 @@ export default function CommonPage() {
 
       <main className="flex-1 max-w-4xl mx-auto w-full py-16 px-8">
         <div className="card p-12 text-center">
-          <div className="w-20 h-20 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <BookOpen size={40} />
+          <div className="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center mx-auto mb-6 overflow-hidden">
+            <img src={logo} alt="EduStack Logo" className="w-14 h-14 object-contain" />
           </div>
           <h1 className="text-4xl font-extrabold mb-4" style={{ color: '#1E2B6F' }}>
             {title}

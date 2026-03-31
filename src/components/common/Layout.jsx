@@ -8,6 +8,7 @@ import {
   IndianRupee, Bell, Settings, HelpCircle, LogOut, BookOpen, UserCheck, ClipboardList,
   CreditCard, AlertCircle, CheckCircle2,
 } from 'lucide-react'
+import logo from '../../assets/Edustack_logo.svg'
 
 const NAV_ITEMS = {
   director: [
@@ -58,9 +59,9 @@ export function Sidebar() {
   return (
     <nav className="sidebar">
       {/* Logo */}
-      <div className="mb-4 flex items-center justify-center w-10 h-10 rounded-xl"
-        style={{ background: 'var(--brand-orange)' }}>
-        <BookOpen size={20} color="white" />
+      <div className="mb-4 flex items-center justify-center w-12 h-12 rounded-xl overflow-hidden bg-white shadow-sm border"
+        style={{ borderColor: 'var(--brand-border)' }}>
+        <img src={logo} alt="EduStack Logo" className="w-10 h-10 object-contain" />
       </div>
 
       {navItems.map(({ icon: Icon, to, label }) => (
@@ -188,7 +189,7 @@ export function Topbar({ title, subtitle }) {
       {/* Center logo */}
       <div className="flex flex-col items-center">
         <div className="flex items-center gap-1.5">
-          <BookOpen size={22} className="text-orange-500" />
+          <img src={logo} alt="EduStack Logo" className="h-8 w-auto" />
           <span className="font-bold text-lg" style={{ color: 'var(--brand-navy)' }}>
             Edu<span style={{ color: 'var(--brand-orange)' }}>Stack</span>
           </span>
